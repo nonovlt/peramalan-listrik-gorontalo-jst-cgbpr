@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIKEL-Gorontalo | Peramalan Energi Listrik JST CG-BPR</title>
+  <title>SIKEL-Gorontalo | Peramalan Listrik JST CG-BPR & Benchmark</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
@@ -24,7 +24,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-  <!-- Header & Top Navigation -->
+  <!-- Header -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
@@ -33,12 +33,18 @@
             <i data-lucide="zap" class="w-5 h-5"></i>
           </div>
           <div>
-            <h1 class="text-lg font-bold text-slate-900 leading-tight">SIKEL-Gorontalo</h1>
-            <p class="text-xs text-slate-500">Peramalan Konsumsi Listrik Rumah Tangga | JST CG-BPR</p>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg font-bold text-slate-900 leading-tight">SIKEL-Gorontalo</h1>
+              <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded-md">v2.0 Advanced</span>
+            </div>
+            <p class="text-xs text-slate-500">Peramalan Energi Listrik Rumah Tangga | JST CG-BPR & Analisis Deret Waktu</p>
           </div>
         </div>
 
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-3">
+          <span id="cloudflareBadge" class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200">
+            <i data-lucide="cloud" class="w-3.5 h-3.5 mr-1 text-amber-600"></i> Cloudflare Ready
+          </span>
           <span id="systemStatusBadge" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
             <span class="w-2 h-2 mr-1.5 rounded-full bg-emerald-500"></span> Siap
           </span>
@@ -50,19 +56,25 @@
 
       <!-- Navigation Tabs -->
       <nav class="flex space-x-1 overflow-x-auto border-t border-slate-100 py-1 text-sm font-medium">
-        <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="nav-tab active-tab px-4 py-2 rounded-lg flex items-center gap-2 border border-transparent transition">
+        <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="nav-tab active-tab px-3.5 py-2 rounded-lg flex items-center gap-1.5 border border-transparent transition whitespace-nowrap">
           <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard & Upload
         </button>
-        <button onclick="switchTab('config')" id="tabBtn-config" class="nav-tab px-4 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-2 border border-transparent transition">
-          <i data-lucide="sliders" class="w-4 h-4"></i> Konfigurasi JST & Training
+        <button onclick="switchTab('eda')" id="tabBtn-eda" class="nav-tab px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-1.5 border border-transparent transition whitespace-nowrap">
+          <i data-lucide="bar-chart-2" class="w-4 h-4"></i> Dekomposisi & Uji ADF
         </button>
-        <button onclick="switchTab('evaluation')" id="tabBtn-evaluation" class="nav-tab px-4 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-2 border border-transparent transition">
-          <i data-lucide="check-circle" class="w-4 h-4"></i> Metrik Evaluasi
+        <button onclick="switchTab('config')" id="tabBtn-config" class="nav-tab px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-1.5 border border-transparent transition whitespace-nowrap">
+          <i data-lucide="sliders" class="w-4 h-4"></i> Konfigurasi & Training
         </button>
-        <button onclick="switchTab('forecast')" id="tabBtn-forecast" class="nav-tab px-4 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-2 border border-transparent transition">
-          <i data-lucide="trending-up" class="w-4 h-4"></i> Mesin Peramalan
+        <button onclick="switchTab('benchmark')" id="tabBtn-benchmark" class="nav-tab px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-1.5 border border-transparent transition whitespace-nowrap">
+          <i data-lucide="scale" class="w-4 h-4"></i> Benchmark Komparasi
         </button>
-        <button onclick="switchTab('reports')" id="tabBtn-reports" class="nav-tab px-4 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-2 border border-transparent transition">
+        <button onclick="switchTab('evaluation')" id="tabBtn-evaluation" class="nav-tab px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-1.5 border border-transparent transition whitespace-nowrap">
+          <i data-lucide="check-circle" class="w-4 h-4"></i> Evaluasi & Residual
+        </button>
+        <button onclick="switchTab('forecast')" id="tabBtn-forecast" class="nav-tab px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-1.5 border border-transparent transition whitespace-nowrap">
+          <i data-lucide="trending-up" class="w-4 h-4"></i> Peramalan (95% CI)
+        </button>
+        <button onclick="switchTab('reports')" id="tabBtn-reports" class="nav-tab px-3.5 py-2 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-50 flex items-center gap-1.5 border border-transparent transition whitespace-nowrap">
           <i data-lucide="file-text" class="w-4 h-4"></i> Download Laporan
         </button>
       </nav>
@@ -74,26 +86,25 @@
 
     <!-- ==================== TAB 1: DASHBOARD & UPLOAD ==================== -->
     <div id="tab-dashboard" class="tab-content space-y-6">
-      <!-- Welcome Banner -->
       <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-900 rounded-2xl p-6 text-white shadow-lg shadow-blue-900/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white mb-2">Kota Gorontalo — Sektor Rumah Tangga</span>
           <h2 class="text-xl md:text-2xl font-bold">Aplikasi Web Peramalan Konsumsi Energi Listrik Bulanan</h2>
           <p class="text-blue-100 text-sm mt-1 max-w-2xl">
-            Sistem peramalan cerdas berbasis Jaringan Saraf Tiruan (JST) dengan optimasi <i>Conjugate Gradient Beale-Powell Restart (CG-BPR)</i> untuk efisiensi konvergensi dan akurasi tinggi.
+            Sistem peramalan cerdas terintegrasi dengan optimasi JST <i>Conjugate Gradient Beale-Powell Restart (CG-BPR)</i>, Uji Stasioneritas ADF, Dekomposisi Musiman, serta Interval Kepercayaan 95%.
           </p>
         </div>
         <div class="flex gap-2">
-          <button onclick="loadSampleData()" class="px-4 py-2 bg-white text-blue-700 rounded-xl text-sm font-semibold hover:bg-blue-50 shadow transition flex items-center gap-1.5">
+          <button onclick="loadSampleData()" class="px-4 py-2 bg-white text-blue-700 rounded-xl text-sm font-semibold hover:bg-blue-50 shadow transition flex items-center gap-1.5 whitespace-nowrap">
             <i data-lucide="database" class="w-4 h-4"></i> Muat Data Sampel
           </button>
         </div>
       </div>
 
-      <!-- Historical Summary Stats -->
+      <!-- Stats Cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Konsumsi Historis</p>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Konsumsi</p>
           <h3 id="statTotalKwh" class="text-xl font-bold text-slate-900 mt-1">-</h3>
           <p class="text-xs text-slate-400 mt-1">Sektor Rumah Tangga (kWh)</p>
         </div>
@@ -103,25 +114,24 @@
           <p class="text-xs text-slate-400 mt-1">kWh per bulan</p>
         </div>
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Beban Tertinggi (Peak)</p>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Beban Puncak (Peak)</p>
           <h3 id="statMaxKwh" class="text-xl font-bold text-emerald-600 mt-1">-</h3>
           <p class="text-xs text-slate-400 mt-1">Puncak pemakaian bulanan</p>
         </div>
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Rekaman Data</p>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Bulan Pengamatan</p>
           <h3 id="statCountData" class="text-xl font-bold text-purple-600 mt-1">-</h3>
-          <p class="text-xs text-slate-400 mt-1">Bulan pengamatan</p>
+          <p class="text-xs text-slate-400 mt-1">Data historis tersedia</p>
         </div>
       </div>
 
-      <!-- Main Historical Chart & Upload Box -->
+      <!-- Historical Chart & Upload -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Chart: 2 Columns -->
         <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col">
           <div class="flex justify-between items-center mb-4">
             <div>
               <h3 class="font-bold text-slate-900 text-base">Grafik Time-Series Konsumsi Energi Listrik Historis</h3>
-              <p class="text-xs text-slate-500">Pola konsumsi bulanan sektor rumah tangga di Kota Gorontalo</p>
+              <p class="text-xs text-slate-500">Dinamika konsumsi bulanan sektor rumah tangga di Kota Gorontalo</p>
             </div>
           </div>
           <div class="relative flex-1 min-h-[340px]">
@@ -129,7 +139,6 @@
           </div>
         </div>
 
-        <!-- Upload Modul: 1 Column -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
           <div>
             <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
@@ -137,7 +146,6 @@
             </h3>
             <p class="text-xs text-slate-500 mt-1 mb-4">Unggah file CSV atau Excel berisikan data historis kelistrikan (kolom Periode dan Konsumsi_kWh).</p>
 
-            <!-- Drop Zone Form -->
             <form id="uploadForm" class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl p-6 text-center transition cursor-pointer bg-slate-50 hover:bg-blue-50/50">
               <input type="file" id="fileInput" name="file" accept=".csv, .xlsx, .xls" class="hidden" onchange="handleFileSelected(event)">
               <div onclick="document.getElementById('fileInput').click()" class="space-y-2">
@@ -155,38 +163,106 @@
           </div>
 
           <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500 space-y-1">
-            <p class="font-semibold text-slate-700">Format Kolom yang Disarankan:</p>
-            <p>• <code>Periode</code> (Contoh: 2021-01, 2021-02)</p>
-            <p>• <code>Konsumsi_kWh</code> (Nilai numerik konsumsi listrik)</p>
+            <p class="font-semibold text-slate-700">Format Kolom yang Didukung:</p>
+            <p>• <code>Periode</code> (Contoh: 2021-01, 2021-02) atau <code>Tahun</code> & <code>Bulan</code></p>
+            <p>• <code>Konsumsi_kWh</code> (Nilai beban listrik)</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 2: KONFIGURASI JST & TRAINING ==================== -->
+    <!-- ==================== TAB 2: DEKOMPOSISI & UJI ADF (NEW) ==================== -->
+    <div id="tab-eda" class="tab-content hidden space-y-6">
+      <!-- ADF Stationarity Test Card -->
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-5 h-5 text-indigo-600"></i> Uji Stasioneritas Augmented Dickey-Fuller (ADF)
+            </h3>
+            <p class="text-xs text-slate-500">Mendeteksi keberadaan unit root dan tren struktural pada data beban listrik</p>
+          </div>
+          <span id="adfStatusBadge" class="px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-700">Memeriksa...</span>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+          <div class="p-3 bg-slate-50 rounded-lg">
+            <span class="text-[11px] text-slate-500">ADF Statistic:</span>
+            <p id="adfStatValue" class="text-base font-bold text-slate-800">-</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-lg">
+            <span class="text-[11px] text-slate-500">p-value:</span>
+            <p id="adfPValue" class="text-base font-bold text-blue-600">-</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-lg">
+            <span class="text-[11px] text-slate-500">Critical Value (5%):</span>
+            <p id="adfCrit5" class="text-base font-bold text-slate-700">-2.89</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-lg">
+            <span class="text-[11px] text-slate-500">Lag Terpilih (AIC):</span>
+            <p id="adfUsedLag" class="text-base font-bold text-slate-700">-</p>
+          </div>
+        </div>
+
+        <p id="adfConclusionText" class="text-xs text-slate-600 mt-3 p-3 bg-blue-50/50 rounded-lg border border-blue-100">
+          Uji ADF mengevaluasi hipotesis nol (H0) bahwa data memiliki unit root. Jika ADF Stat < Nilai Kritis 5%, data telah stasioner.
+        </p>
+      </div>
+
+      <!-- Seasonal Decomposition Charts -->
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div>
+          <h3 class="font-bold text-slate-900 text-base">Dekomposisi Musiman Klasik (Trend, Seasonal, Residual)</h3>
+          <p class="text-xs text-slate-500">Memisahkan pergerakan tren jangka panjang, variasi musiman tahunan, dan fluktuasi acak</p>
+        </div>
+        <div class="relative min-h-[360px]">
+          <canvas id="decompChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: KONFIGURASI JST & TRAINING ==================== -->
     <div id="tab-config" class="tab-content hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <!-- Parameter Config Form -->
+        <!-- Parameter Form -->
         <div class="lg:col-span-1 bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
           <div class="border-b border-slate-100 pb-3">
             <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
-              <i data-lucide="sliders" class="w-5 h-5 text-blue-600"></i> Konfigurasi Parameter JST
+              <i data-lucide="sliders" class="w-5 h-5 text-blue-600"></i> Konfigurasi JST & CG-BPR
             </h3>
-            <p class="text-xs text-slate-500 mt-0.5">Pengaturan arsitektur dan parameter Beale-Powell Restart</p>
+            <p class="text-xs text-slate-500 mt-0.5">Parameter arsitektur neural network dan optimasi konjugat</p>
           </div>
 
-          <form id="trainConfigForm" class="space-y-3.5 text-sm">
+          <form id="trainConfigForm" class="space-y-3 text-sm">
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Lag Time-Series (Input Nodes)</label>
               <input type="number" id="paramLag" value="6" min="1" max="24" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
               <span class="text-[11px] text-slate-400">Jumlah bulan sebelumnya sebagai input sliding window.</span>
             </div>
 
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Hidden Neurons</label>
+                <input type="text" id="paramHidden" value="10" placeholder="10 atau 16,8" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Fungsi Aktivasi</label>
+                <select id="paramActivation" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                  <option value="sigmoid" selected>Sigmoid (Standar)</option>
+                  <option value="tanh">Tanh (Hyperbolic)</option>
+                  <option value="relu">ReLU (Rectified)</option>
+                </select>
+              </div>
+            </div>
+
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Hidden Layer Neurons</label>
-              <input type="text" id="paramHidden" value="10" placeholder="contoh: 10 atau 10,5" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-              <span class="text-[11px] text-slate-400">Jumlah neuron (bisa multi-layer dipisah koma).</span>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Algoritma Optimasi</label>
+              <select id="paramOptimizer" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-blue-50 font-medium text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <option value="cgb" selected>CG Beale-Powell Restart (Diusulkan)</option>
+                <option value="cg_pr">Standard CG (Polak-Ribiere)</option>
+                <option value="sgd_momentum">SGD with Momentum</option>
+              </select>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -202,17 +278,16 @@
 
             <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-100 space-y-3">
               <p class="text-xs font-bold text-blue-900 flex items-center gap-1.5">
-                <i data-lucide="zap" class="w-3.5 h-3.5 text-blue-600"></i> Optimasi Conjugate Gradient Beale-Powell
+                <i data-lucide="zap" class="w-3.5 h-3.5 text-blue-600"></i> Parameter Beale-Powell Restart
               </p>
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Interval Restart Periodik (N)</label>
                 <input type="number" id="paramRestartInterval" value="15" min="2" max="100" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                <span class="text-[11px] text-slate-500">Reset arah konjugasi periodik setiap N iterasi.</span>
               </div>
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Powell Orthogonality Threshold (&eta;)</label>
                 <input type="number" id="paramPowellThreshold" step="0.05" value="0.2" min="0.05" max="1.0" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                <span class="text-[11px] text-slate-500">Kriteria Powell: |g<sub>k</sub><sup>T</sup> g<sub>k-1</sub>| &ge; &eta; ||g<sub>k</sub>||<sup>2</sup></span>
+                <span class="text-[11px] text-slate-500">|g<sub>k</sub><sup>T</sup> g<sub>k-1</sub>| &ge; &eta; ||g<sub>k</sub>||<sup>2</sup></span>
               </div>
             </div>
 
@@ -235,7 +310,7 @@
         <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col space-y-4">
           <div class="flex justify-between items-center border-b border-slate-100 pb-3">
             <div>
-              <h3 class="font-bold text-slate-900 text-base">Visualisasi Loss Curve (Real-Time)</h3>
+              <h3 class="font-bold text-slate-900 text-base">Visualisasi Loss Curve (Real-Time SSE)</h3>
               <p class="text-xs text-slate-500">Penurunan nilai error MSE terhadap epoch dengan optimasi CG-BPR</p>
             </div>
             <div id="trainingStatusPill" class="text-xs px-2.5 py-1 rounded-full font-medium bg-slate-100 text-slate-600">
@@ -243,7 +318,6 @@
             </div>
           </div>
 
-          <!-- Progress bar -->
           <div class="space-y-1.5">
             <div class="flex justify-between text-xs font-medium text-slate-600">
               <span id="trainProgressLabel">Progress Pelatihan: 0%</span>
@@ -254,7 +328,6 @@
             </div>
           </div>
 
-          <!-- Metrics Real-Time Row -->
           <div class="grid grid-cols-3 gap-3">
             <div class="bg-slate-50 p-3 rounded-lg border border-slate-200/60">
               <p class="text-[11px] text-slate-500 uppercase font-medium">Current Loss (MSE)</p>
@@ -270,7 +343,6 @@
             </div>
           </div>
 
-          <!-- Real-Time Chart Canvas -->
           <div class="relative flex-1 min-h-[300px]">
             <canvas id="lossChart"></canvas>
           </div>
@@ -278,107 +350,145 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 3: METRIK EVALUASI ==================== -->
-    <div id="tab-evaluation" class="tab-content hidden space-y-6">
-      <!-- Accuracy Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-            <i data-lucide="target" class="w-6 h-6"></i>
-          </div>
+    <!-- ==================== TAB 4: BENCHMARK & KOMPARASI (NEW) ==================== -->
+    <div id="tab-benchmark" class="tab-content hidden space-y-6">
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
           <div>
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">MSE (Testing)</p>
-            <h3 id="evalMseValue" class="text-xl font-bold text-slate-900 mt-0.5">-</h3>
-            <p class="text-xs text-slate-500">Mean Squared Error</p>
+            <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <i data-lucide="scale" class="w-5 h-5 text-indigo-600"></i> Uji Komparasi Ilmiah 3 Algoritma Optimasi
+            </h3>
+            <p class="text-xs text-slate-500">Bandingkan CG Beale-Powell Restart vs Standard CG (Polak-Ribiere) vs Momentum SGD</p>
+          </div>
+          <button onclick="runBenchmarkTest()" id="btnRunBenchmark" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition flex items-center gap-1.5 whitespace-nowrap">
+            <i data-lucide="play-circle" class="w-4 h-4"></i> Jalankan Benchmark 3-Model
+          </button>
+        </div>
+
+        <!-- Comparative Chart -->
+        <div class="py-4">
+          <div class="relative min-h-[340px]">
+            <canvas id="benchmarkChart"></canvas>
           </div>
         </div>
 
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-            <i data-lucide="activity" class="w-6 h-6"></i>
+        <!-- Benchmark Matrix Table -->
+        <div class="mt-4 border-t border-slate-100 pt-4">
+          <h4 class="font-semibold text-slate-800 text-sm mb-3">Tabel Hasil Komparasi Performa:</h4>
+          <div class="overflow-x-auto rounded-lg border border-slate-200">
+            <table class="w-full text-left text-xs text-slate-600">
+              <thead class="bg-slate-50 text-slate-700 uppercase font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-2.5">Algoritma Optimasi</th>
+                  <th class="px-4 py-2.5 text-right">MSE Testing</th>
+                  <th class="px-4 py-2.5 text-right">RMSE (kWh)</th>
+                  <th class="px-4 py-2.5 text-right">MAPE (%)</th>
+                  <th class="px-4 py-2.5 text-right">Waktu (detik)</th>
+                  <th class="px-4 py-2.5 text-center">Total Restart</th>
+                </tr>
+              </thead>
+              <tbody id="benchmarkTableBody" class="divide-y divide-slate-100 bg-white">
+                <tr>
+                  <td colspan="6" class="px-4 py-6 text-center text-slate-400">Silakan klik "Jalankan Benchmark 3-Model" untuk memulai komparasi.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div>
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">RMSE (Testing)</p>
-            <h3 id="evalRmseValue" class="text-xl font-bold text-indigo-600 mt-0.5">-</h3>
-            <p class="text-xs text-slate-500">Root Mean Squared Error (kWh)</p>
-          </div>
-        </div>
 
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-            <i data-lucide="percent" class="w-6 h-6"></i>
-          </div>
-          <div>
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">MAPE (Testing)</p>
-            <h3 id="evalMapeValue" class="text-xl font-bold text-emerald-600 mt-0.5">-</h3>
-            <span id="evalMapeBadge" class="inline-block text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded mt-0.5">Sangat Akurat</span>
+          <div id="academicConclusionBox" class="hidden mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-800">
+            <p class="font-bold mb-1 flex items-center gap-1.5">
+              <i data-lucide="award" class="w-4 h-4 text-emerald-600"></i> Kesimpulan Evaluasi Komparatif:
+            </p>
+            <p id="academicConclusionText">-</p>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Actual vs Predicted Plot -->
+    <!-- ==================== TAB 5: EVALUASI & RESIDUAL ==================== -->
+    <div id="tab-evaluation" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">MSE (Testing)</p>
+          <h3 id="evalMseValue" class="text-lg font-bold text-slate-900 mt-0.5">-</h3>
+          <p class="text-[11px] text-slate-400">Mean Squared Error</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">RMSE (Testing)</p>
+          <h3 id="evalRmseValue" class="text-lg font-bold text-indigo-600 mt-0.5">-</h3>
+          <p class="text-[11px] text-slate-400">Root Mean Squared Error (kWh)</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">MAPE (Testing)</p>
+          <h3 id="evalMapeValue" class="text-lg font-bold text-emerald-600 mt-0.5">-</h3>
+          <span id="evalMapeBadge" class="inline-block text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded mt-0.5">Sangat Akurat</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Durbin-Watson (DW)</p>
+          <h3 id="evalDwValue" class="text-lg font-bold text-blue-600 mt-0.5">-</h3>
+          <span id="evalDwBadge" class="inline-block text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded mt-0.5">Bebas Autokorelasi</span>
+        </div>
+      </div>
+
+      <!-- Actual vs Fitted Chart -->
       <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
           <div>
             <h3 class="font-bold text-slate-900 text-base">Plot Data Aktual vs Data Prediksi (Fitted)</h3>
-            <p class="text-xs text-slate-500">Evaluasi performa model JST CG-BPR pada data Training dan data Testing</p>
-          </div>
-          <div class="flex items-center gap-2 text-xs">
-            <span class="inline-flex items-center gap-1.5 text-slate-600"><span class="w-3 h-3 bg-blue-600 rounded-sm inline-block"></span> Aktual</span>
-            <span class="inline-flex items-center gap-1.5 text-slate-600"><span class="w-3 h-3 bg-emerald-500 rounded-sm inline-block"></span> Prediksi</span>
+            <p class="text-xs text-slate-500">Evaluasi performa model JST CG-BPR pada data Training dan Testing</p>
           </div>
         </div>
-        <div class="relative min-h-[360px]">
+        <div class="relative min-h-[350px]">
           <canvas id="evalChart"></canvas>
         </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 4: MESIN PERAMALAN ==================== -->
+    <!-- ==================== TAB 6: MESIN PERAMALAN (95% CI) ==================== -->
     <div id="tab-forecast" class="tab-content hidden space-y-6">
       <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
           <div>
             <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
-              <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i> Proyeksi Peramalan n-Bulan ke Depan
+              <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i> Proyeksi Peramalan n-Bulan dengan 95% Confidence Interval
             </h3>
-            <p class="text-xs text-slate-500">Gunakan model yang telah terlatih untuk meramalkan konsumsi listrik beberapa bulan mendatang</p>
+            <p class="text-xs text-slate-500">Peramalan multi-step rekursif dilengkapi batas bawah dan batas atas toleransi ketidakpastian</p>
           </div>
           <div class="flex items-center gap-3">
             <div class="flex items-center gap-2">
               <label class="text-xs font-semibold text-slate-700">Jumlah Bulan:</label>
               <input type="number" id="forecastSteps" value="12" min="1" max="60" class="w-20 px-3 py-1.5 border border-slate-300 rounded-lg text-sm text-center font-bold focus:ring-2 focus:ring-blue-500">
             </div>
-            <button onclick="executeForecast()" id="btnRunForecast" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 shadow-md shadow-blue-600/20 transition flex items-center gap-1.5">
+            <button onclick="executeForecast()" id="btnRunForecast" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 shadow-md shadow-blue-600/20 transition flex items-center gap-1.5 whitespace-nowrap">
               <i data-lucide="sparkles" class="w-4 h-4"></i> Ramalkan Sekarang
             </button>
           </div>
         </div>
 
-        <!-- Forecast Chart -->
         <div class="py-4">
           <div class="relative min-h-[380px]">
             <canvas id="forecastChart"></canvas>
           </div>
         </div>
 
-        <!-- Forecast Table -->
         <div class="mt-6 border-t border-slate-100 pt-4">
-          <h4 class="font-semibold text-slate-800 text-sm mb-3">Tabel Hasil Peramalan Masa Depan:</h4>
+          <h4 class="font-semibold text-slate-800 text-sm mb-3">Tabel Hasil Proyeksi Masa Depan (95% Interval Kepercayaan):</h4>
           <div class="overflow-x-auto rounded-lg border border-slate-200 max-h-72 overflow-y-auto">
             <table class="w-full text-left text-xs text-slate-600">
               <thead class="bg-slate-50 text-slate-700 uppercase font-semibold sticky top-0 border-b border-slate-200">
                 <tr>
-                  <th class="px-4 py-2.5 text-center">Bulan Ke-</th>
+                  <th class="px-4 py-2.5 text-center">No</th>
                   <th class="px-4 py-2.5">Periode</th>
                   <th class="px-4 py-2.5">Tahun</th>
                   <th class="px-4 py-2.5">Bulan</th>
-                  <th class="px-4 py-2.5 text-right">Prediksi Konsumsi Energi (kWh)</th>
+                  <th class="px-4 py-2.5 text-right text-slate-500">Batas Bawah (95%)</th>
+                  <th class="px-4 py-2.5 text-right font-bold text-blue-600">Prediksi Konsumsi (kWh)</th>
+                  <th class="px-4 py-2.5 text-right text-slate-500">Batas Atas (95%)</th>
                 </tr>
               </thead>
               <tbody id="forecastTableBody" class="divide-y divide-slate-100 bg-white">
                 <tr>
-                  <td colspan="5" class="px-4 py-6 text-center text-slate-400">Silakan klik "Ramalkan Sekarang" untuk menghasilkan data proyeksi masa depan.</td>
+                  <td colspan="7" class="px-4 py-6 text-center text-slate-400">Silakan klik "Ramalkan Sekarang" untuk menghasilkan data proyeksi masa depan.</td>
                 </tr>
               </tbody>
             </table>
@@ -387,7 +497,7 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 5: DOWNLOAD LAPORAN ==================== -->
+    <!-- ==================== TAB 7: DOWNLOAD LAPORAN ==================== -->
     <div id="tab-reports" class="tab-content hidden space-y-6">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto text-center space-y-6">
         <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto shadow-md">
@@ -396,12 +506,11 @@
         <div>
           <h3 class="text-xl font-bold text-slate-900">Ekspor Laporan Hasil Peramalan</h3>
           <p class="text-sm text-slate-500 max-w-md mx-auto mt-1">
-            Unduh laporan komprehensif berisikan parameter konfigurasi model JST, evaluasi metrik akurasi (MSE, RMSE, MAPE), serta tabel proyeksi energi listrik Kota Gorontalo.
+            Unduh laporan komprehensif berisikan parameter model JST, evaluasi metrik akurasi (MSE, RMSE, MAPE), diagnostik residual, serta tabel proyeksi energi listrik Kota Gorontalo.
           </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-          <!-- Download CSV -->
           <a href="/api/export/csv" download class="p-5 border border-slate-200 hover:border-blue-500 rounded-xl bg-slate-50 hover:bg-blue-50/50 transition flex flex-col items-center group">
             <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition">
               <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
@@ -410,22 +519,20 @@
             <p class="text-xs text-slate-500 mt-1">Data tabular hasil peramalan</p>
           </a>
 
-          <!-- Download Excel -->
           <a href="/api/export/excel" download class="p-5 border border-slate-200 hover:border-blue-500 rounded-xl bg-slate-50 hover:bg-blue-50/50 transition flex flex-col items-center group">
             <div class="w-12 h-12 bg-green-100 text-green-700 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition">
               <i data-lucide="sheet" class="w-6 h-6"></i>
             </div>
             <h4 class="font-bold text-slate-800 text-sm">Unduh Format Excel</h4>
-            <p class="text-xs text-slate-500 mt-1">Multi-sheet dengan parameter model</p>
+            <p class="text-xs text-slate-500 mt-1">Multi-sheet lengkap dengan parameter</p>
           </a>
 
-          <!-- Download PDF -->
           <a href="/api/export/pdf" download class="p-5 border border-slate-200 hover:border-blue-500 rounded-xl bg-slate-50 hover:bg-blue-50/50 transition flex flex-col items-center group">
             <div class="w-12 h-12 bg-red-100 text-red-700 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition">
               <i data-lucide="file-text" class="w-6 h-6"></i>
             </div>
             <h4 class="font-bold text-slate-800 text-sm">Unduh Laporan PDF</h4>
-            <p class="text-xs text-slate-500 mt-1">Dokumen formal siap cetak/sidang</p>
+            <p class="text-xs text-slate-500 mt-1">Laporan teknis formal siap sidang</p>
           </a>
         </div>
       </div>
@@ -433,14 +540,12 @@
 
   </main>
 
-  <!-- Footer -->
   <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
     <div class="max-w-7xl mx-auto px-4">
-      Sistem Peramalan Konsumsi Energi Listrik Bulanan Sektor Rumah Tangga di Kota Gorontalo — JST Conjugate Gradient Beale-Powell Restart
+      SIKEL-Gorontalo — Sistem Peramalan Konsumsi Energi Listrik Bulanan Sektor Rumah Tangga Menggunakan JST Conjugate Gradient Beale-Powell Restart
     </div>
   </footer>
 
-  <!-- Main JavaScript App -->
   <script src="/static/js/app.js"></script>
   <script>
     lucide.createIcons();
