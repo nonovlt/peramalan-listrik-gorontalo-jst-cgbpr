@@ -1,0 +1,32 @@
+=== SISTEM PERAMALAN KONSUMSI ENERGI LISTRIK KOTA GORONTALO (JST CG-BPR) ===,,,,
+Tanggal Proses:,2026-11-17 22:57:54,,,
+,,,,
+1. PARAMETER MODEL & OPTIMASI,,,,
+Parameter,Nilai,Keterangan,,
+Algoritma Optimasi,Conjugate Gradient Beale-Powell Restart (CG-BPR),Second-order-like optimization with Powell restart criteria,,
+Fitur Lag (Window),6 Bulan,Jumlah bulan historis input sliding window,,
+Hidden Layer Neurons,10,Struktur 1 Hidden Layer dengan aktivasi Sigmoid,,
+Maksimum Epoch,150,Batas iterasi pelatihan,,
+Restart Interval (N),15,Periodik reset arah konjugasi setiap N langkah,,
+Powell Orthogonality Threshold (eta),0.2,Kriteria |g_{k+1}^T g_k| >= 0.2 ||g_{k+1}||^2,,
+,,,,
+2. METRIK EVALUASI AKURASI PENGUJIAN (TESTING),,,,
+Metrik,Nilai,Satuan,Kategori Akurasi,
+Mean Squared Error (MSE),"1,191,358,398,162.47",-,Semakin kecil semakin baik,
+Root Mean Squared Error (RMSE),"1,091,493.65",kWh,Deviasi rata-rata peramalan,
+Mean Absolute Percentage Error (MAPE),3.75%,%,Sangat Baik (< 10%),
+,,,,
+3. TABEL HASIL PERAMALAN BULANAN (12 BULAN KE DEPAN),,,,
+Langkah Ke-,Periode,Tahun,Bulan,Prediksi Konsumsi Listrik (kWh)
+1,2025-01,2025,Januari,24783029.09
+2,2025-02,2025,Februari,24395858.63
+3,2025-03,2025,Maret,24312884.38
+4,2025-04,2025,April,24694081.94
+5,2025-05,2025,Mei,24906897.26
+6,2025-06,2025,Juni,24847493.53
+7,2025-07,2025,Juli,24288390.43
+8,2025-08,2025,Agustus,24042198.47
+9,2025-09,2025,September,24023395.86
+10,2025-10,2025,Oktober,24180795.18
+11,2025-11,2025,November,24253297.67
+12,2025-12,2025,Desember,24156252.71
